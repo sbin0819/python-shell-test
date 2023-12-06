@@ -1,6 +1,6 @@
 export default function Home() {
   const onClick = async () => {
-    fetch('/api/py', {
+    fetch('/api/execute-python', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
