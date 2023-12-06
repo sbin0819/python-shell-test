@@ -1,28 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PythonShell } from 'python-shell'
 
+interface Test {
+  params: number[]
+  answer: number
+}
+
+interface RequestBody {
+  userAnswer: string
+  unitTests: Test[]
+}
+
 type Data = {
   data: any
 }
-
-const unitTests = [
-  {
-    params: [1, 2],
-    answer: 3,
-  },
-  {
-    params: [0, 0],
-    answer: 0,
-  },
-  {
-    params: [1, -1],
-    answer: 0,
-  },
-  {
-    params: [123456789, 987654321],
-    answer: 1111111110,
-  },
-]
 
 export default async function handler(
   req: NextApiRequest,
@@ -30,9 +21,9 @@ export default async function handler(
 ) {
   const correctAnswer = 3
 
-  const correctAnswers = [3, 0, 0, 1111111110]
+  //   const correctAnswers = [3, 0, 0, 1111111110]
 
-  const userResponse = 'def solution(a, b):\n  return a + b'
+  const { userAnswer, unitTests }: RequestBody = req.body
 
   //   const suffix = `\nprint(solution(${unitTests[0].params[0]}, ${unitTests[0].params[1]}))`
 
@@ -46,7 +37,7 @@ export default async function handler(
   suffix += '])'
 
   try {
-    const messages = await PythonShell.runString(userResponse + suffix)
+    const messages = await PythonShell.runString(userAnswer + suffix)
 
     console.log(messages)
 
